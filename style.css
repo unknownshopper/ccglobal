@@ -20,7 +20,7 @@ img,video{max-width:100%; height:auto; display:block}
 .skip-link{position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden}
 .skip-link:focus{left:1rem;top:1rem;width:auto;height:auto;background:#fff;color:#000;padding:.5rem .75rem;border-radius:.25rem}
 
-.site-header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.85);backdrop-filter:saturate(180%) blur(8px);border-bottom:1px solid rgba(0,0,0,.06);overflow:hidden}
+.site-header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.85);backdrop-filter:saturate(180%) blur(8px);border-bottom:1px solid rgba(0,0,0,.06);overflow:visible}
 .site-header::after{content:"";position:absolute;inset:0;pointer-events:none;
   /* Degradado sutil: naranja (brand) a transparencia/blanco */
   background: linear-gradient(180deg, rgba(249,115,22,0.10) 0%, rgba(255,255,255,0.55) 55%, rgba(255,255,255,0.85) 100%);
@@ -281,7 +281,7 @@ html.a11y-contrast hr, html.a11y-contrast .divider{border-color:rgba(255,255,255
   .nav-toggle{display:inline-flex}
   .site-header .header-inner{gap:.5rem}
   .site-nav{position:absolute;top:72px;left:1rem;right:1rem;background:var(--surface);border:1px solid rgba(0,0,0,.08);border-radius:.5rem;box-shadow:0 10px 30px rgba(0,0,0,.10);
-    display:block;opacity:0;transform:translateY(-8px);visibility:hidden;pointer-events:none;transition:opacity 1.5s ease,transform 1.5s ease,visibility 0s linear 1.5s}
+    display:block;opacity:0;transform:translateY(-8px);visibility:hidden;pointer-events:none;transition:opacity 1.5s ease,transform 1.5s ease,visibility 0s linear 1.5s;z-index:60}
   .site-nav.open{opacity:1;transform:translateY(0);visibility:visible;pointer-events:auto;transition:opacity 1.5s ease,transform 1.5s ease}
   .site-nav ul{flex-direction:column;padding:.5rem}
   .site-nav a{display:block}
