@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Corporativo de Consultoría Global - Soluciones: Odoo ERP, GRP, SIGEDI, PdI. Transparencia, interoperabilidad y cumplimiento normativo.">
+  <title>CCGlobal | Soluciones y Consultoría</title>
+  <!-- Tipografía Ubuntu -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="ccglogok.png" type="image/png">
+  <link rel="shortcut icon" href="ccglogok.png" type="image/png">
+  <link rel="apple-touch-icon" href="ccglogok.png">
+  <!-- SEO básico -->
+  <meta name="theme-color" content="#f97316">
+  <!-- Open Graph (Editar URLs absolutas cuando se publique) -->
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="es_MX">
+  <meta property="og:title" content="CCGlobal | Soluciones y Consultoría">
+  <meta property="og:description" content="Soluciones: Odoo ERP, GRP, SIGEDI, PdI. Transparencia, interoperabilidad y cumplimiento normativo.">
+  <meta property="og:image" content="https://ccglobal.mx/ccglogok.png">
+  <meta property="og:url" content="https://ccglobal.mx/">
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="CCGlobal | Soluciones y Consultoría">
+  <meta name="twitter:description" content="Soluciones: Odoo ERP, GRP, SIGEDI, PdI. Transparencia e interoperabilidad.">
+  <meta name="twitter:image" content="https://ccglobal.mx/ccglogok.png">
+</head>
+<body>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <div class="brand">
+        <!-- Logotipo -->
+        <a href="index.html#inicio" class="logo" aria-label="CCGlobal inicio"><img src="ccglogok.png" alt="CCGlobal"></a>
+      </div>
+      <button class="nav-toggle" aria-label="Abrir menú" aria-controls="primary-nav" aria-expanded="false">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+      <nav class="site-nav" id="primary-nav" aria-label="Navegación principal">
+        <ul>
+          <li><a href="index.html#inicio">Inicio / Nosotros</a></li>
+          <li><a href="prodserv.html">Productos y Servicios</a></li>
+          <li><a href="contacto.html">Contacto</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenido" tabindex="-1">
+    <section id="inicio" class="hero section">
+      <div class="container">
+        <div class="hero-media" role="region" aria-label="Video institucional">
+          <!-- TODO: Reemplazar src por video corporativo (< 1 min) -->
+          <video class="hero-video" autoplay loop muted playsinline disablepictureinpicture controlslist="nodownload noplaybackrate noremoteplayback" preload="metadata" poster="bullbco.png" aria-label="Video sobre CCGlobal">
+            <source src="video/ccglobal_intro.mp4" type="video/mp4">
+            Tu navegador no soporta video HTML5.
+          </video>
+        </div>
+        <div class="hero-copy">
+          <h1>Corporativo de Consultoría Global</h1>
+          <h3>Somos una gran empresa con certificaciones nacionales e internacionales. Desarrollamos soluciones que garantizan transparencia, eficiencia e interoperabilidad.</h3>
+          <h3>Ofrecemos consultoría y plataformas tecnológicas alineadas a normativas vigentes, asegurando disponibilidad y transparencia de la información en tiempo real.</h3>
+        </div>
+      </div>
+    </section>
+
+    <section id="nosotros" class="about section">
+      <div class="container">
+        <h2><span>Acerca de Nosotros</span></h2>
+        <p>Ofrecemos consultoría y plataformas tecnológicas alineadas a normativas vigentes, asegurando disponibilidad y transparencia de la información en tiempo real.</p>
+        <div class="certificados">
+          <h3>Certificaciones</h3>
+          <!-- TODO: Insertar certificados (PDF/imagen) -->
+          <ul class="cert-list">
+            <li>Certificación Nacional (placeholder)</li>
+            <li>Certificación Internacional (placeholder)</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-brand"><img src="ccglogok.png" alt="CCGlobal" loading="lazy" decoding="async"></div>
+      <p>&copy; <span id="year"></span> CCGlobal. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
