@@ -400,13 +400,26 @@ setActiveByPath();
       bPlay.setAttribute('aria-pressed','false');
       return;
     }
-    const selected = getSelectedText();
+    // Respetar selección reciente: si al pulsar se perdió, usa el caché (hasta 7s)
+    let selected = getSelectedText();
+    if (!selected && lastSelText && (Date.now() - lastSelAt) < 7000){ selected = lastSelText; }
     const text = selected || getPageText();
     if (!text) return;
     bPlay.textContent = 'Detener';
     bPlay.setAttribute('aria-pressed','true');
     speak(text);
   });
+
+  // Evitar que el mousedown colapse la selección en algunos navegadores móviles
+  bPlay.addEventListener('mousedown', (e)=>{ e.preventDefault(); });
+
+  // Cachear última selección de texto (útil en móvil cuando el click colapsa la selección)
+  let lastSelText = '';
+  let lastSelAt = 0;
+  function captureSelection(){
+    const t = getSelectedText();
+    if (t){ lastSelText = t; lastSelAt = Date.now(); }
+  }
 
   // Floating badge to read current selection
   selBadge = DOC.createElement('button');
@@ -476,7 +489,7 @@ setActiveByPath();
     if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); selBadge.click(); }
     if (e.key === 'Escape'){ hideSelBadge(); }
   });
-  DOC.addEventListener('selectionchange', ()=>{ setTimeout(maybeShowBadge, 0); });
+  DOC.addEventListener('selectionchange', ()=>{ captureSelection(); setTimeout(maybeShowBadge, 0); });
   DOC.addEventListener('mouseup', ()=>{ setTimeout(maybeShowBadge, 0); });
   DOC.addEventListener('pointerup', ()=>{ setTimeout(maybeShowBadge, 0); });
   DOC.addEventListener('touchend', ()=>{ setTimeout(maybeShowBadge, 0); }, { passive: true });
