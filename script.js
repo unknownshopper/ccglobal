@@ -203,7 +203,7 @@ setActiveByPath();
       </div>
       <div class="row" id="a11y-tts-row" aria-label="Lectura de texto">
         <button type="button" id="a11y-tts-play" title="Leer en voz alta">Leer</button>
-        <span id="a11y-tts-note" class="note" aria-live="off" style="display:none"></span>
+        <span id="a11y-tts-note" class="note" aria-live="polite"></span>
       </div>
       <div class="row" id="a11y-tts-rate-row" aria-label="Velocidad de lectura">
         <label for="a11y-tts-rate" style="min-width:120px">Velocidad</label>
@@ -237,6 +237,7 @@ setActiveByPath();
     panel.classList.add('open');
     btn.setAttribute('aria-expanded','true');
     (bContrast || panel).focus();
+    ensureTTSReady();
   }
   function closePanel(){
     panel.classList.remove('open');
@@ -286,6 +287,7 @@ setActiveByPath();
       setButtonSpeaking(false);
       return;
     }
+    ensureTTSReady();
     togglePanel();
   });
 
@@ -339,31 +341,38 @@ setActiveByPath();
   function updateTTSAvailability(){
     const supported = !!synth;
     const haveVoices = supported && voices && voices.length > 0;
-    const disable = !supported || !haveVoices;
-    [bPlay].forEach(btn=>{ if(btn){ btn.disabled = disable; btn.setAttribute('aria-disabled', String(disable)); }});
+    const disable = !supported; // si está soportado, permitimos click para "despertar" voces
+    if (bPlay){ bPlay.disabled = disable; bPlay.setAttribute('aria-disabled', String(disable)); }
     if (rateInput){ rateInput.disabled = !supported; rateInput.setAttribute('aria-disabled', String(!supported)); }
     if (ttsNote){
       if (!supported) ttsNote.textContent = 'Lectura no disponible en este navegador.';
       else if (!haveVoices) ttsNote.textContent = 'Cargando voces…';
       else ttsNote.textContent = 'Voz: Español (México) si está disponible';
     }
-    // Also hide badge if not available
-    if (!supported || !haveVoices){ hideSelBadge(); setSelBadgeSpeaking(false); setButtonSpeaking(false); }
+    // No ocultar el badge si solo faltan voces; sí ocultar cuando no hay soporte
+    if (!supported){ hideSelBadge(); setSelBadgeSpeaking(false); setButtonSpeaking(false); }
   }
   refreshVoices();
   if (synth && typeof synth.onvoiceschanged !== 'undefined') synth.onvoiceschanged = refreshVoices;
   // Some engines need a kick to populate voices
   if (synth && (!voices || voices.length === 0)) setTimeout(refreshVoices, 400);
 
-  let paused = false; // no longer used (pause removed)
-  function getSelectedText(){
-    const sel = window.getSelection();
-    return sel && String(sel).trim().length > 0 ? String(sel).trim() : '';
+  // Preparar/activar voces y motor TTS tras un gesto del usuario (mejora móviles)
+  let ttsPrimed = false;
+  function ensureTTSReady(){
+    if (!synth) return;
+    try {
+      refreshVoices();
+      if (voices && voices.length) return;
+      if (ttsPrimed) return;
+      ttsPrimed = true;
+      const u = new SpeechSynthesisUtterance(' ');
+      u.volume = 0; u.rate = 1; u.onend = refreshVoices; u.onerror = refreshVoices;
+      synth.speak(u);
+    } catch {}
   }
-  function getPageText(){
-    const main = DOC.querySelector('main') || DOC.body;
-    return (main.textContent || '').replace(/\s+/g,' ').trim();
-  }
+
+  // Speaking-state helper for the floating accessibility button
   function speak(text){
     if (!text) return;
     // Stop any ongoing
@@ -376,10 +385,6 @@ setActiveByPath();
     const r = rateInput ? (parseFloat(rateInput.value) || 1.0) : 1.0;
     utter.rate = Math.max(1.0, Math.min(1.4, r));
     utter.pitch = 1;
-    paused = false;
-    // When speech ends, reset button label
-    utter.onend = () => { if (bPlay){ bPlay.textContent = 'Leer'; bPlay.setAttribute('aria-pressed','false'); } setButtonSpeaking(false); setSelBadgeSpeaking(false); hideSelBadge(); };
-    utter.oncancel = () => { if (bPlay){ bPlay.textContent = 'Leer'; bPlay.setAttribute('aria-pressed','false'); } setButtonSpeaking(false); setSelBadgeSpeaking(false); hideSelBadge(); };
     setButtonSpeaking(true);
     setSelBadgeSpeaking(true);
     synth.speak(utter);
@@ -388,6 +393,7 @@ setActiveByPath();
   // Single toggle: start reading on first click, stop on next click
   bPlay.addEventListener('click', ()=>{
     if (!synth) return;
+    ensureTTSReady();
     if (synth.speaking) {
       synth.cancel();
       bPlay.textContent = 'Leer';
@@ -417,6 +423,10 @@ setActiveByPath();
     if (!sel || sel.rangeCount === 0) return null;
     const range = sel.getRangeAt(0).cloneRange();
     if (String(sel).trim().length === 0) return null;
+    // En móvil, getBoundingClientRect puede dar 0 si cruza nodos: probar getClientRects primero
+    const rects = range.getClientRects ? Array.from(range.getClientRects()) : [];
+    const first = rects.find(r => r && (r.width > 0 || r.height > 0));
+    if (first) return first;
     const rect = range.getBoundingClientRect();
     if (!rect || (rect.width === 0 && rect.height === 0)) return null;
     return rect;
@@ -436,11 +446,13 @@ setActiveByPath();
     showSelBadge();
   }
   function maybeShowBadge(){
-    const supported = !!synth;
-    if (!supported) return hideSelBadge();
     const txt = getSelectedText();
-    if (txt && txt.length >= 2){ positionSelBadge(); if (synth && synth.speaking) setSelBadgeSpeaking(true); else setSelBadgeSpeaking(false); }
-    else hideSelBadge();
+    if (txt && txt.length >= 2){
+      positionSelBadge();
+      if (synth && synth.speaking) setSelBadgeSpeaking(true); else setSelBadgeSpeaking(false);
+    } else {
+      hideSelBadge();
+    }
   }
   selBadge.addEventListener('click', ()=>{
     if (synth && synth.speaking){
@@ -451,6 +463,7 @@ setActiveByPath();
       hideSelBadge();
       return;
     }
+    ensureTTSReady();
     const txt = getSelectedText();
     if (txt) {
       if (bPlay){ bPlay.textContent = 'Detener'; bPlay.setAttribute('aria-pressed','true'); }
@@ -465,6 +478,8 @@ setActiveByPath();
   });
   DOC.addEventListener('selectionchange', ()=>{ setTimeout(maybeShowBadge, 0); });
   DOC.addEventListener('mouseup', ()=>{ setTimeout(maybeShowBadge, 0); });
+  DOC.addEventListener('pointerup', ()=>{ setTimeout(maybeShowBadge, 0); });
+  DOC.addEventListener('touchend', ()=>{ setTimeout(maybeShowBadge, 0); }, { passive: true });
   DOC.addEventListener('keyup', (e)=>{ if (e.key && (e.key.length === 1 || e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === 'ArrowUp' || e.key === 'ArrowDown')) setTimeout(maybeShowBadge, 0); });
   window.addEventListener('scroll', hideSelBadge, true);
   window.addEventListener('resize', hideSelBadge);
@@ -482,6 +497,16 @@ setActiveByPath();
       rateInput.setAttribute('aria-valuenow', String(r));
       setPref('a11y_tts_rate', String(r));
     });
+  }
+
+  // Helpers para obtener texto seleccionado y texto de la página
+  function getSelectedText(){
+    const sel = window.getSelection();
+    return sel && String(sel).trim().length > 0 ? String(sel).trim() : '';
+  }
+  function getPageText(){
+    const main = DOC.querySelector('main') || DOC.body;
+    return (main.textContent || '').replace(/\s+/g,' ').trim();
   }
 
   function pickSpanishVoice(){
