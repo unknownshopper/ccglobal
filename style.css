@@ -45,6 +45,7 @@ img,video{max-width:100%; height:auto; display:block}
 
 .section{padding:3.5rem 0}
 .section h2{margin-top:0;color:var(--brand)}
+.hero.section{padding-top:0}
 
 .hero .container{display:block; padding:0}
 .hero-media{position:relative;width:100vw;margin-left:calc(50% - 50vw);height:clamp(320px,65vh,780px)}
