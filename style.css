@@ -260,6 +260,13 @@ html.a11y-contrast hr, html.a11y-contrast .divider{border-color:rgba(255,255,255
   .service-card h4{flex:initial}
 }
 
+/* Responsive for services grid */
+@media (max-width: 1024px){
+  .service-card{flex-direction:column}
+  .service-card .service-thumb{width:100%; height:160px}
+  .service-card h4{flex:initial}
+}
+
 /* ---- Otros Servicios: filtros en 6 columnas (desktop) ---- */
 .grid.filters-6{grid-template-columns:repeat(6, minmax(0,1fr));align-items:stretch}
 .grid.filters-6 .card{padding:.6rem .6rem}
@@ -425,3 +432,8 @@ html.a11y-contrast .scroll-top-btn{background:var(--brand);color:#000;border:2px
     background-size: 16px 16px; /* asegurar nitidez */
   }
 }
+
+/* Otserv: quitar bullets personalizados en el catálogo de servicios */
+.services{list-style: none; padding-left: 0}
+.services li{padding-left: 0; margin:.5rem 0}
+.services li::before{content: none}
