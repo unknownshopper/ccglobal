@@ -392,3 +392,36 @@ html.a11y-contrast .scroll-top-btn{background:var(--brand);color:#000;border:2px
 
 /* Asegura que el contenedor de CV colapsado no se muestre */
 .cv-content[hidden]{display:none !important}
+
+/* ---- Bullets personalizados con bllt.png para listas de contenido ---- */
+/* Aplica a listas dentro del contenido principal, evita menús y listas especiales */
+.hero-content ul:not(.check-list):not(.index-list),
+.products .product .collapsible-content ul,
+.services ul{
+  list-style: none; padding-left: 1.5rem; margin-left: 0;
+}
+
+.hero-content ul:not(.check-list):not(.index-list) li,
+.products .product .collapsible-content ul li,
+.services li{
+  position: relative; padding-left: .5rem; margin:.35rem 0;
+}
+
+.hero-content ul:not(.check-list):not(.index-list) li::before,
+.products .product .collapsible-content ul li::before,
+.services li::before{
+  content: ""; position: absolute; left: -1.5rem; top: .2rem;
+  width: 16px; height: 16px;
+  background-image: url('bllt.png');
+  background-size: 16px 16px; background-repeat: no-repeat; background-position: center;
+  filter: none; /* mantener colores originales del bullet */
+}
+
+/* Ajuste para densidad de píxeles alta */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi){
+  .hero-content ul:not(.check-list):not(.index-list) li::before,
+  .products .product .collapsible-content ul li::before,
+  .services li::before{
+    background-size: 16px 16px; /* asegurar nitidez */
+  }
+}

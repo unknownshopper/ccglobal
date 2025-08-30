@@ -1061,3 +1061,143 @@ setActiveByPath();
     });
   });
 })();
+
+// ================= Favicon giratorio (gira cada 5s) =================
+(function enableRotatingFavicon(){
+  const DOC = document;
+  const DPR = Math.max(1, Math.floor(window.devicePixelRatio || 1));
+  const CYCLE_MS = 10000; // 5s giro + 5s pausa
+  const ACTIVE_MS = 5000; // duración de la animación de giro
+  const SIZE = 32; // tamaño favicon
+  const PERIOD_MS = CYCLE_MS; // giro completo cada 10s
+
+  // Reunir todos los links de icono (algunos navegadores priorizan shortcut icon)
+  let links = Array.from(DOC.querySelectorAll('link[rel~="icon"], link[rel~="shortcut" i][rel*="icon" i]'));
+  if (!links.length){
+    const l = DOC.createElement('link');
+    l.rel = 'icon';
+    l.type = 'image/x-icon';
+    l.href = 'ccg.ico?v=4';
+    DOC.head.appendChild(l);
+    links = [l];
+  }
+
+  const primary = links[0];
+  const originalHref = primary.getAttribute('href') || 'ccg.ico?v=4';
+  const originalType = primary.getAttribute('type') || 'image/x-icon';
+
+  // Preferimos usar el .ico; si no se puede dibujar, caemos a PNG
+  const icoSrc = originalHref;
+  const pngFallback = 'ccglogok.png?v=4';
+  const img = new Image();
+  img.decoding = 'async';
+  img.crossOrigin = 'anonymous';
+
+  let usedFallback = false;
+  let fallbackTimer = 0;
+
+  function switchToFallback(){
+    if (!usedFallback){
+      usedFallback = true;
+      img.src = pngFallback;
+    }
+  }
+
+  img.onerror = switchToFallback;
+
+  // Si el .ico carga pero no expone dimensiones (algunos navegadores), forzar fallback tras 1.5s
+  fallbackTimer = setTimeout(()=>{
+    if (!img.complete || img.naturalWidth === 0) switchToFallback();
+  }, 1500);
+
+  img.src = icoSrc;
+
+  const canvas = DOC.createElement('canvas');
+  canvas.width = SIZE * DPR;
+  canvas.height = SIZE * DPR;
+  const ctx = canvas.getContext('2d');
+
+  let running = true;
+  let rafId = 0;
+  let startT = performance.now();
+  let lastDraw = 0;
+
+  function updateAllIcons(url){
+    // Reemplazar los nodos <link> para forzar refresco del favicon en más navegadores
+    links = links.map(old => {
+      const neu = old.cloneNode(false);
+      neu.setAttribute('rel', old.getAttribute('rel') || 'icon');
+      neu.setAttribute('type','image/png');
+      neu.setAttribute('href', url);
+      if (old.parentNode) old.parentNode.replaceChild(neu, old);
+      return neu;
+    });
+  }
+
+  function drawFrame(t){
+    if (!running) return;
+    if (DOC.hidden) { rafId = requestAnimationFrame(drawFrame); return; }
+    if (!img.complete || img.naturalWidth === 0){ rafId = requestAnimationFrame(drawFrame); return; }
+
+    const phase = ((t - startT) % CYCLE_MS + CYCLE_MS) % CYCLE_MS; // [0, CYCLE_MS)
+    const w = canvas.width, h = canvas.height;
+    const cx = w/2, cy = h/2;
+    let ang = 0;
+    if (phase < ACTIVE_MS) {
+      ang = (phase / ACTIVE_MS) * Math.PI * 2;
+    } else {
+      // En pausa: dibuja como 0° y reduce la frecuencia (máx. cada 500ms)
+      if (t - lastDraw < 500) { rafId = requestAnimationFrame(drawFrame); return; }
+    }
+
+    ctx.clearRect(0,0,w,h);
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(ang);
+
+    const pad = 2 * DPR; // margen para no cortar bordes
+    const targetW = w - pad*2;
+    const targetH = h - pad*2;
+    const r = (img.naturalWidth && img.naturalHeight) ? img.naturalWidth / img.naturalHeight : 1;
+    let dw = targetW, dh = targetH;
+    if (r > 1) dh = dw / r; else dw = dh * r;
+
+    ctx.drawImage(img, -dw/2, -dh/2, dw, dh);
+    ctx.restore();
+
+    try {
+      const url = canvas.toDataURL('image/png');
+      updateAllIcons(url);
+    } catch {}
+
+    lastDraw = t;
+    rafId = requestAnimationFrame(drawFrame);
+  }
+
+  function start(){ if (!rafId) rafId = requestAnimationFrame(drawFrame); }
+  function stop(){ if (rafId){ cancelAnimationFrame(rafId); rafId = 0; } }
+
+  img.addEventListener('load', ()=>{ clearTimeout(fallbackTimer); start(); }, { once: true });
+
+  // Pausar cuando la pestaña esté oculta y reanudar al volver
+  DOC.addEventListener('visibilitychange', ()=>{
+    if (DOC.hidden) {
+      stop();
+      // conservar último frame
+    } else {
+      start();
+    }
+  });
+
+  // Restaurar favicon original al salir
+  window.addEventListener('beforeunload', ()=>{
+    try {
+      links.forEach((l, i)=>{
+        if (i === 0){ l.setAttribute('type', originalType); l.setAttribute('href', originalHref); }
+        else { l.setAttribute('type', originalType); l.setAttribute('href', originalHref); }
+      });
+    } catch {}
+    running = false;
+    stop();
+  });
+})();
