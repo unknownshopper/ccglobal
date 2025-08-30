@@ -533,6 +533,75 @@ setActiveByPath();
   }
 })();
 
+// ================= Header: ocultar al hacer scroll hacia abajo =================
+(function initHideOnScrollHeader(){
+  const header = document.querySelector('.site-header');
+  if (!header) return;
+  let lastY = window.scrollY || 0;
+  let ticking = false;
+  const THRESHOLD = 12;         // px mínimos de desplazamiento para considerar cambio
+  const SHOW_AFTER_TOP = 20;    // siempre mostrar cerca del top
+
+  // Medir y fijar la altura real del header como variable CSS
+  function setHeaderVar(){
+    // Forzar layout para medida precisa
+    const h = header.offsetHeight || header.getBoundingClientRect().height || 0;
+    if (h){ header.style.setProperty('--hideY', `${Math.ceil(h)}px`); }
+  }
+  // Actualizar al cargar, al redimensionar y tras carga del logo
+  window.addEventListener('load', setHeaderVar, { once: true });
+  window.addEventListener('resize', setHeaderVar);
+  // Si hay logo imagen, actualizar cuando cargue por si cambia la altura
+  const logoImg = header.querySelector('.logo img');
+  if (logoImg){ if (logoImg.complete) setHeaderVar(); else logoImg.addEventListener('load', setHeaderVar, { once: true }); }
+  // Medida inicial
+  setHeaderVar();
+
+  function isMenuOpen(){
+    const nav = document.getElementById('primary-nav');
+    const toggle = document.querySelector('.nav-toggle');
+    return (nav && nav.classList.contains('open')) || (toggle && toggle.classList.contains('active'));
+  }
+
+  function update(){
+    ticking = false;
+    const y = window.scrollY || document.documentElement.scrollTop || 0;
+    const dy = y - lastY;
+
+    // Mostrar si estamos cerca del inicio o si el menú está abierto
+    if (y <= SHOW_AFTER_TOP || isMenuOpen()){
+      header.classList.remove('site-header--hidden');
+      lastY = y;
+      return;
+    }
+
+    // Solo actuar si el movimiento supera el umbral
+    if (Math.abs(dy) > THRESHOLD){
+      if (dy > 0){
+        // Scroll hacia abajo: ocultar
+        header.classList.add('site-header--hidden');
+      } else {
+        // Scroll hacia arriba: mostrar
+        header.classList.remove('site-header--hidden');
+      }
+      lastY = y;
+    }
+  }
+
+  window.addEventListener('scroll', ()=>{
+    if (!ticking){
+      window.requestAnimationFrame(update);
+      ticking = true;
+    }
+  }, { passive: true });
+
+  window.addEventListener('resize', ()=>{
+    // Recalcular estado al cambiar viewport
+    lastY = window.scrollY || 0;
+    header.classList.remove('site-header--hidden');
+  });
+})();
+
 // ================= Botón flotante: Volver arriba =================
 (function initScrollTopButton(){
   const DOC = document;
@@ -578,11 +647,7 @@ setActiveByPath();
       const importedMain = tpl.content.querySelector('main#main');
       if (!importedMain) return;
 
-      // Insertar controles (index-actions) si existen
-      const actions = importedMain.querySelector('.index-actions');
-      if (actions) {
-        anchorSection.insertAdjacentElement('afterend', actions);
-      }
+      // Mantener .index-actions dentro de su sección Índice para que quede debajo de la lista
 
       // Recopilar secciones (omitir #sobre-nosotros y #experiencia para no duplicar)
       const sections = Array.from(importedMain.querySelectorAll(':scope > section'))
@@ -590,7 +655,7 @@ setActiveByPath();
 
       // Funciones para colapsables
       function wrapContentForSection(section){
-        const head = section.querySelector('h2.display');
+        const head = section.querySelector('h2.display, h3.display, h4.display');
         if (!head) return null;
         // Crear contenedor para el resto del contenido
         const contentId = `${section.id || 'cv'}-content`;
@@ -609,7 +674,7 @@ setActiveByPath();
         head.setAttribute('role', 'button');
         head.setAttribute('tabindex', '0');
         head.setAttribute('aria-controls', contentId);
-        const isIndex = section.id === 'indice';
+        const isIndex = (section.id || '').toLowerCase() === 'indice';
         head.setAttribute('aria-expanded', isIndex ? 'true' : 'false');
 
         // Listeners
@@ -625,15 +690,16 @@ setActiveByPath();
           });
         }
 
-        // Colapsado por defecto al cargar
-        setOpen(isIndex);
+        // Colapsado por defecto al cargar: asegurar hidden inicialmente y luego abrir solo #indice
+        content.setAttribute('hidden','');
+        if (isIndex) content.removeAttribute('hidden');
 
         return { section, head, content, setOpen, isOpen };
       }
 
       // Insertar secciones y preparar colapsables
       const prepared = [];
-      let lastInserted = actions || anchorSection;
+      let lastInserted = anchorSection;
       sections.forEach(sec => {
         lastInserted.insertAdjacentElement('afterend', sec);
         lastInserted = sec;

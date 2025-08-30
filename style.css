@@ -20,16 +20,14 @@ img,video{max-width:100%; height:auto; display:block}
 .skip-link{position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden}
 .skip-link:focus{left:1rem;top:1rem;width:auto;height:auto;background:#fff;color:#000;padding:.5rem .75rem;border-radius:.25rem}
 
-.site-header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.85);backdrop-filter:saturate(180%) blur(8px);border-bottom:1px solid rgba(0,0,0,.06);overflow:visible}
-.site-header::after{content:"";position:absolute;inset:0;pointer-events:none;
-  /* Degradado sutil: naranja (brand) a transparencia/blanco */
-  background: linear-gradient(180deg, rgba(249,115,22,0.10) 0%, rgba(255,255,255,0.55) 55%, rgba(255,255,255,0.85) 100%);
-  transition: opacity 1.5s ease;
-  opacity:1;
-}
-.header-inner{display:flex;align-items:center;justify-content:space-between;min-height:64px}
+.site-header{position:sticky;top:0;z-index:50;background:transparent;backdrop-filter:saturate(180%) blur(8px);border-bottom:1px solid rgba(0,0,0,.06);overflow:visible;transition:transform .35s ease;will-change:transform;--hideY: 140%;height: 90px;margin-bottom:10px;}
+.site-header.site-header--hidden{transform:translateY(calc(-1 * var(--hideY)));pointer-events:none}
+.site-header.site-header--hidden .header-inner{transform:translateY(calc(-1 * var(--hideY)));transition:transform .35s ease}
+.site-header.site-header--hidden::after{opacity:0}
+.site-header::after{content:"";position:absolute;inset:0;pointer-events:none;transition: opacity 1.5s ease;opacity:0}
+.header-inner{display:flex;align-items:center;justify-content:space-between;min-height:60px}
 .logo{display:inline-block;font-weight:700;color:var(--brand);text-decoration:none;letter-spacing:.5px}
-.logo img{display:block;height:40px;max-height:40px;width:auto;transition:height 1.5s ease}
+.logo img{display:block;height:120px;max-height:120px;width:auto;transition:height 1.5s ease}
 .site-nav ul{display:flex;gap:1rem;list-style:none;margin:0;padding:0}
 .site-nav a{color:var(--text);text-decoration:none;padding:.5rem .75rem;border-radius:.375rem;transition:background-color 1.5s ease,color 1.5s ease}
 .site-nav a:focus,.site-nav a:hover{background:rgba(0,0,0,.06);color:var(--brand)}
@@ -89,7 +87,7 @@ img,video{max-width:100%; height:auto; display:block}
 
 .site-footer{border-top:1px solid rgba(0,0,0,.06);padding:1rem 0;background:var(--surface)}
 .site-footer .container{display:flex;align-items:center;gap:1rem;justify-content:space-between}
-.footer-brand img{display:block;height:30px;max-height:30px;width:auto}
+.footer-brand img{display:block;height:44px;max-height:44px;width:auto}
 .site-footer p{margin:.25rem 0;color:var(--muted)}
 
 .btn{display:inline-block;background:var(--accent);color:#fff;padding:.6rem 1rem;border-radius:.5rem;text-decoration:none;font-weight:600}
@@ -277,15 +275,17 @@ html.a11y-contrast hr, html.a11y-contrast .divider{border-color:rgba(255,255,255
   .hero-copy{padding:0 .25rem}
   .hero-actions{gap:.5rem}
   /* Logo más pequeño en móviles */
-  .logo img{height:44px;max-height:44px}
+  .logo img{height:56px;max-height:56px}
   /* Mostrar botón y colapsar nav */
   .nav-toggle{display:inline-flex}
   .site-header .header-inner{gap:.5rem}
-  .site-nav{position:absolute;top:72px;left:1rem;right:1rem;background:var(--surface);border:1px solid rgba(0,0,0,.08);border-radius:.5rem;box-shadow:0 10px 30px rgba(0,0,0,.10);
+  .site-nav{position:absolute;top:84px;left:1rem;right:1rem;background:var(--surface);border:1px solid rgba(0,0,0,.08);border-radius:.5rem;box-shadow:0 10px 30px rgba(0,0,0,.10);
     display:block;opacity:0;transform:translateY(-8px);visibility:hidden;pointer-events:none;transition:opacity 1.5s ease,transform 1.5s ease,visibility 0s linear 1.5s;z-index:60}
   .site-nav.open{opacity:1;transform:translateY(0);visibility:visible;pointer-events:auto;transition:opacity 1.5s ease,transform 1.5s ease}
   .site-nav ul{flex-direction:column;padding:.5rem}
   .site-nav a{display:block}
+  /* Footer logo ajuste móvil */
+  .footer-brand img{height:40px;max-height:40px}
  }
 
 /* Floating selection read badge */
@@ -331,11 +331,11 @@ html.a11y-contrast #a11y-tts-select-badge{
 
 /* Variantes y utilidades usadas en cv.html */
 .section--muted{background:var(--surface)}
-.display{font-size:clamp(1.5rem,3.2vw,2.25rem);line-height:1.2;margin:.25rem 0 1rem}
+.display{font-size:clamp(1.5rem,3.2vw,2.25rem);line-height:1.2;margin:.25rem 0 1rem;color:var(--brand)}
 .check-list{list-style: none; padding-left: 0}
 .check-list li{position:relative;padding-left:1.5rem;margin:.35rem 0}
 .check-list li::before{content:"✔";position:absolute;left:0;top:.15rem;color:var(--brand);font-weight:700}
-.index-actions{display:flex;gap:.5rem;justify-content:flex-end;margin:.5rem 0 1rem}
+.index-actions{display:flex;gap:.5rem;justify-content:center;margin:.5rem 0 1rem}
 .index-list{list-style:none;margin:0;padding:0;display:grid;gap:1rem;grid-template-columns:repeat(3,minmax(0,1fr))}
 .index-list li{margin:0}
 .index-list a{display:block;text-decoration:none;background:var(--surface);border:1px solid rgba(0,0,0,.08);border-radius:.5rem;padding:.85rem 1rem;color:var(--text);box-shadow:0 1px 2px rgba(0,0,0,.04);transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease}
@@ -344,7 +344,7 @@ html.a11y-contrast #a11y-tts-select-badge{
 .index-list a::after{content:"→";float:right;color:var(--brand);font-weight:600}
 @media (max-width:1024px){.index-list{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:640px){.index-list{grid-template-columns:1fr}}
-.cv-head{cursor:pointer;user-select:none}
+.cv-head{cursor:pointer;user-select:none;color:var(--brand)}
 .cv-head:focus{outline:2px solid var(--brand);outline-offset:2px}
 .cv-head[aria-expanded="false"] + p,.cv-head[aria-expanded="false"] + figure{display:none} /* opcional: nada visual por ahora */
 
@@ -370,7 +370,25 @@ html.a11y-contrast #a11y-tts-select-badge{
 html.a11y-contrast .scroll-top-btn{background:var(--brand);color:#000;border:2px solid rgba(255,255,255,.6)}
 
 /* ---- CV integrado en index: imágenes reducidas sin recorte ---- */
-.cv-content img{display:block;max-width:100%;height:auto;margin:0 auto}
+.cv-content img{display:block;width:100%;max-width:880px;height:auto;object-fit:contain;margin:0 auto}
 .cv-content figure{margin:1rem auto;max-width:880px}
 @media (max-width:1024px){.cv-content figure{max-width:720px}}
 @media (max-width:640px){.cv-content figure{max-width:100%}}
+
+.index-actions{display:flex;gap:.5rem;justify-content:center;margin:.5rem 0 1rem}
+
+.about .cert-list{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;padding-left:0}
+.about .cert-list img{height:64px !important;width:auto !important;max-width:100%;object-fit:contain;display:block}
+
+/* ---- Index: compacta el contenido de main (#contenido) sin afectar otras páginas ---- */
+#contenido{font-size:80%}
+#contenido .section{padding:2rem 0}
+#contenido .display{font-size:clamp(1.25rem,2.4vw,1.6rem)}
+#contenido .hero-copy h1{font-size:clamp(1.4rem,2.4vw,2rem)}
+#contenido .hero-copy h3{font-size:clamp(1rem,1.8vw,1.15rem)}
+#contenido .index-list{gap:.75rem}
+#contenido .index-list a{padding:.6rem .75rem}
+#contenido .btn{padding:.45rem .75rem}
+
+/* Asegura que el contenedor de CV colapsado no se muestre */
+.cv-content[hidden]{display:none !important}
