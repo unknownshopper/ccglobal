@@ -775,6 +775,55 @@ setActiveByPath();
         }
         if (target) scrollToEl(target);
       }
+
+      // ---- Lightbox para imágenes del CV (solo index) ----
+      (function setupCVLightbox(){
+        // Crear overlay una sola vez
+        let overlay = document.getElementById('cv-lightbox');
+        if (!overlay){
+          overlay = document.createElement('div');
+          overlay.id = 'cv-lightbox';
+          overlay.setAttribute('aria-hidden','true');
+          overlay.innerHTML = '<div class="cv-lightbox-inner" role="dialog" aria-label="Imagen ampliada"><img alt="" /><div class="cv-lightbox-close-hint" aria-hidden="true">Click/tap para cerrar · Esc</div></div>';
+          document.body.appendChild(overlay);
+        }
+        const imgEl = overlay.querySelector('img');
+
+        function openLightbox(src, alt){
+          if (!src) return;
+          imgEl.src = src; imgEl.alt = alt || '';
+          overlay.classList.add('open');
+          overlay.setAttribute('aria-hidden','false');
+          // Focus trap mínimo: enfocar overlay para que Esc funcione de inmediato
+          overlay.focus && overlay.focus();
+          document.addEventListener('keydown', onKeydown);
+        }
+        function closeLightbox(){
+          overlay.classList.remove('open');
+          overlay.setAttribute('aria-hidden','true');
+          imgEl.removeAttribute('src');
+          document.removeEventListener('keydown', onKeydown);
+        }
+        function onKeydown(e){ if (e.key === 'Escape') closeLightbox(); }
+
+        // Cerrar con clic/tap fuera de la imagen
+        overlay.addEventListener('click', (e)=>{ if (!e.target) return; if (e.target === overlay || !e.target.closest('img')) closeLightbox(); });
+
+        // Delegar click en imágenes dentro del CV integrado
+        const cvImages = document.querySelectorAll('.cv-content img');
+        cvImages.forEach(img => {
+          // Evitar duplicar listeners si se re-ejecutara por alguna razón
+          if (img.dataset.lbReady === '1') return;
+          img.dataset.lbReady = '1';
+          img.style.cursor = img.style.cursor || 'zoom-in';
+          img.addEventListener('click', ()=> openLightbox(img.currentSrc || img.src, img.alt));
+          img.addEventListener('keydown', (e)=>{ if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLightbox(img.currentSrc || img.src, img.alt); } });
+          // Accesibilidad: permitir foco
+          if (!img.hasAttribute('tabindex')) img.setAttribute('tabindex','0');
+          if (!img.hasAttribute('role')) img.setAttribute('role','button');
+          if (!img.hasAttribute('aria-label')) img.setAttribute('aria-label','Abrir imagen');
+        });
+      })();
     })
     .catch(()=>{/* opcional: silenciar si no existe cv.html */});
 })();

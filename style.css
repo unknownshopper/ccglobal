@@ -224,7 +224,7 @@ html.a11y-contrast hr, html.a11y-contrast .divider{border-color:rgba(255,255,255
 .muted{color:var(--muted)}
 .grid{display:grid;gap:1rem}
 .cols-3{grid-template-columns:repeat(3, minmax(0,1fr))}
-.card{display:block;background:#fff;border:1px solid rgba(0,0,0,.06);border-radius:.75rem;padding:1rem;text-decoration:none;color:inherit;box-shadow:0 1px 2px rgba(0,0,0,.02);transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease}
+.card{display:block;background:#fff;border:1px solid rgba(0,0,0,.06);padding:1rem;border-radius:.75rem;text-decoration:none;color:inherit;box-shadow:0 1px 2px rgba(0,0,0,.02);transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease}
 .card:hover,.card:focus{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.10);border-color:rgba(0,0,0,.12)}
 .card-title{margin:.25rem 0 .25rem;color:var(--text);font-size:1.05rem;display:flex;align-items:center;gap:.5rem}
 .badge{display:inline-block;font-size:.75rem;line-height:1;padding:.25rem .5rem;border-radius:999px;background:var(--surface);color:var(--text);border:1px solid rgba(0,0,0,.06)}
@@ -377,25 +377,10 @@ html.a11y-contrast #a11y-tts-select-badge{
 html.a11y-contrast .scroll-top-btn{background:var(--brand);color:#000;border:2px solid rgba(255,255,255,.6)}
 
 /* ---- CV integrado en index: imágenes reducidas sin recorte ---- */
-.cv-content img{display:block;width:100%;max-width:880px;height:auto;object-fit:contain;margin:0 auto}
-.cv-content figure{margin:1rem auto;max-width:880px}
-@media (max-width:1024px){.cv-content figure{max-width:720px}}
-@media (max-width:640px){.cv-content figure{max-width:100%}}
-
-.index-actions{display:flex;gap:.5rem;justify-content:center;margin:.5rem 0 1rem}
-
-.about .cert-list{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;padding-left:0}
-.about .cert-list img{height:64px !important;width:auto !important;max-width:100%;object-fit:contain;display:block}
-
-/* ---- Index: compacta el contenido de main (#contenido) sin afectar otras páginas ---- */
-#contenido{font-size:80%}
-#contenido .section{padding:2rem 0}
-#contenido .display{font-size:clamp(1.25rem,2.4vw,1.6rem)}
-#contenido .hero-copy h1{font-size:clamp(1.4rem,2.4vw,2rem)}
-#contenido .hero-copy h3{font-size:clamp(1rem,1.8vw,1.15rem)}
-#contenido .index-list{gap:.75rem}
-#contenido .index-list a{padding:.6rem .75rem}
-#contenido .btn{padding:.45rem .75rem}
+.cv-content figure{margin:.5rem auto;max-width:520px}
+.cv-content img{display:block;width:100%;max-width:520px;height:auto;object-fit:contain;margin:0 auto;border-radius:8px;border:1px solid rgba(0,0,0,.08);box-shadow:0 2px 12px rgba(0,0,0,.08);cursor:zoom-in}
+@media (max-width:1024px){.cv-content figure{max-width:480px}}
+.cv-content figcaption{font-size:.9em;text-align:center}
 
 /* Asegura que el contenedor de CV colapsado no se muestre */
 .cv-content[hidden]{display:none !important}
@@ -437,3 +422,66 @@ html.a11y-contrast .scroll-top-btn{background:var(--brand);color:#000;border:2px
 .services{list-style: none; padding-left: 0}
 .services li{padding-left: 0; margin:.5rem 0}
 .services li::before{content: none}
+
+.about .cert-list{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;padding-left:0}
+.about .cert-list img{height:64px !important;width:auto !important;max-width:100%;object-fit:contain;display:block}
+
+/* ---- Index: compacta el contenido de main (#contenido) sin afectar otras páginas ---- */
+#contenido{font-size:70%}
+#contenido .section{padding:2rem 0}
+#contenido .display{font-size:clamp(1.25rem,2.4vw,1.6rem)}
+#contenido .hero-copy h1{font-size:clamp(1.4rem,2.4vw,2rem)}
+#contenido .hero-copy h3{font-size:clamp(1rem,1.8vw,1.15rem)}
+#contenido .index-list{gap:.75rem}
+#contenido .index-list a{padding:.6rem .75rem}
+#contenido .btn{padding:.45rem .75rem}
+
+.index-actions{display:flex;gap:.5rem;justify-content:center;margin:.5rem 0 1rem}
+
+/* ---- CV integrado en index: sección Herramientas ---- */
+#herramientas .cv-content{
+  display:grid;
+  grid-template-columns:repeat(3, minmax(0,1fr));
+  gap:.75rem;
+  align-items:start;
+}
+/* Por defecto, todo el contenido ocupa el ancho completo */
+#herramientas .cv-content > *{ grid-column:1 / -1 }
+/* Las figuras (imágenes) se colocan como miniaturas en columnas */
+#herramientas .cv-content > figure{
+  grid-column:auto;
+  max-width:200px;
+  justify-self:center;
+}
+#herramientas .cv-content > figure img{
+  max-width:180px;
+  cursor:zoom-in;
+}
+@media (max-width:1024px){
+  #herramientas .cv-content{ grid-template-columns:repeat(2, minmax(0,1fr)) }
+}
+@media (max-width:640px){
+  #herramientas .cv-content{ grid-template-columns:1fr }
+}
+
+/* ---- Lightbox para imágenes del CV en index ---- */
+#cv-lightbox{
+  position:fixed; inset:0; z-index:1200; display:none;
+  background:rgba(0,0,0,.75);
+}
+#cv-lightbox.open{display:flex}
+#cv-lightbox .cv-lightbox-inner{
+  margin:auto; max-width:95vw; max-height:95vh; display:flex; align-items:center; justify-content:center;
+}
+#cv-lightbox img{
+  display:block; max-width:95vw; max-height:95vh; width:auto; height:auto; object-fit:contain;
+  box-shadow:0 10px 40px rgba(0,0,0,.5);
+}
+#cv-lightbox[aria-hidden="false"]{outline:0}
+#cv-lightbox .cv-lightbox-close-hint{
+  position:fixed; bottom:16px; left:50%; transform:translateX(-50%);
+  color:#eee; font-size:.9rem; background:rgba(0,0,0,.35); padding:.35rem .6rem; border-radius:.5rem;
+}
+html.a11y-contrast #cv-lightbox{background:rgba(255,255,255,.85)}
+html.a11y-contrast #cv-lightbox img{box-shadow:0 10px 40px rgba(255,255,255,.35)}
+html.a11y-contrast #cv-lightbox .cv-lightbox-close-hint{color:#000; background:rgba(255,255,255,.7)}
