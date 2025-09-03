@@ -1,15 +1,17 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Certificado NMX-R-025-SCFI-2015 - CCGlobal">
-  <title>Certificado | CCGlobal</title>
-  <!-- Tipografía Ubuntu -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Certificaciones Internacionales | CCGlobal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="ccg.ico?v=4" sizes="any" type="image/x-icon">
+  <link rel="shortcut icon" href="ccg.ico?v=4" type="image/x-icon">
+  <link rel="apple-touch-icon" href="ccglogok.png?v=4">
+  <meta name="theme-color" content="#f97316">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -27,44 +29,55 @@
     }
   }
   </script>
-  <link rel="icon" href="ccg.ico?v=4" sizes="any" type="image/x-icon">
-  <link rel="shortcut icon" href="ccg.ico?v=4" type="image/x-icon">
-  <link rel="apple-touch-icon" href="ccglogok.png?v=4">
-  <meta name="theme-color" content="#f97316">
 </head>
 <body>
-  <a class="skip-link" href="#contenido">Saltar al contenido</a>
   <header class="site-header" role="banner">
     <div class="container header-inner">
-      <div class="brand">
-        <a href="index.html#inicio" class="logo" aria-label="CCGlobal inicio"><img src="ccglogok.png" alt="CCGlobal"></a>
-      </div>
-      <button class="nav-toggle" aria-label="Abrir menú" aria-controls="primary-nav" aria-expanded="false">
-        <span class="bar"></span>
-        <span class="bar"></span>
-        <span class="bar"></span>
-      </button>
-      <nav class="site-nav" id="primary-nav" aria-label="Navegación principal">
+      <a href="index.html#inicio" class="logo" aria-label="CCGlobal inicio">
+        <img src="ccglogok.png" alt="CCGlobal" loading="lazy" decoding="async">
+      </a>
+      <nav class="site-nav" aria-label="Principal">
         <ul>
-          <li><a href="index.html#inicio">Inicio / Nosotros</a></li>
+          <li><a href="index.html#inicio">Inicio</a></li>
           <li><a href="prodserv.html">Productos y Servicios</a></li>
+          <li><a href="otserv.html">Otros servicios</a></li>
           <li><a href="contacto.html">Contacto</a></li>
         </ul>
       </nav>
     </div>
   </header>
 
-  <main id="contenido" tabindex="-1">
+  <main id="contenido" class="content" role="main">
     <section class="section">
       <div class="container">
-        <div class="cert-info" tabindex="0" role="region" aria-label="Información del certificado">
-          <h2>Certificado de Cumplimiento</h2>
-          <h1>NMX-R-025-SCFI-2015</h1>
-          <p>En Igualdad Laboral y No Discriminación</p>
-          <p>ACCM América, S. de R.L. de C.V.</p>
-          <p>Corporativo de Consultoría Global S. de R.L. de C.V.</p>
-          <img src="certs/nmxr025accm.png" alt="Certificación Nacional" loading="lazy" decoding="async" width="100%" aria-label="Certificado NMX-R-025-SCFI-2015">
-          <p><a href="index.html" class="btn" aria-label="Regresar al inicio de la página">Regresar al inicio</a></p>
+        <h1>Certificaciones Internacionales</h1>
+        <p class="muted">Documentos disponibles para consulta y descarga.</p>
+
+        <div class="doc-grid">
+          <!-- Cards from certs/internac/ -->
+          <article class="doc-card">
+            <svg class="doc-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Zm0 2v4h4"/></svg>
+            <div>
+              <h3>CERTIFICADO BVOP_JCB.pdf</h3>
+              <p>Carpeta: certs/internac</p>
+              <div class="doc-actions">
+                <a href="certs/internac/CERTIFICADO BVOP_JCB.pdf" target="_blank" rel="noopener">Ver</a>
+                <a href="certs/internac/CERTIFICADO BVOP_JCB.pdf" download>Descargar</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="doc-card">
+            <svg class="doc-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Zm0 2v4h4"/></svg>
+            <div>
+              <h3>Certificado BVOP_YBH.pdf</h3>
+              <p>Carpeta: certs/internac</p>
+              <div class="doc-actions">
+                <a href="certs/internac/Certificado BVOP_YBH.pdf" target="_blank" rel="noopener">Ver</a>
+                <a href="certs/internac/Certificado BVOP_YBH.pdf" download>Descargar</a>
+              </div>
+            </div>
+          </article>
         </div>
       </div>
     </section>
@@ -75,7 +88,7 @@
       <div class="footer-grid">
         <div class="footer-col">
           <a href="index.html#inicio" class="footer-brand" aria-label="CCGlobal inicio"><img src="ccglogok.png" alt="CCGlobal" loading="lazy" decoding="async"></a>
-          <p class="muted">Compromiso con la igualdad laboral y no discriminación.</p>
+          <p class="muted">Transparencia, eficiencia e interoperabilidad a través de soluciones tecnológicas y consultoría especializada.</p>
         </div>
         <div class="footer-col">
           <h4>Empresa</h4>
