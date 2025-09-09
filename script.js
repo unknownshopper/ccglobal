@@ -1250,3 +1250,60 @@ setActiveByPath();
     stop();
   });
 })();
+
+// ================= Modal: Detalle de Gestores (prodserv) =================
+(function initGestoresModal(){
+  const path = (location.pathname.split('/').pop() || '').toLowerCase();
+  if (path !== 'prodserv.html') return;
+
+  const openBtn = document.getElementById('open-gestores-modal');
+  const modal = document.getElementById('gestores-modal');
+  if (!openBtn || !modal) return;
+
+  const dialog = modal.querySelector('.modal-dialog');
+  const closeBtn = modal.querySelector('#gestores-modal-close');
+  const closeBtn2 = modal.querySelector('#gestores-modal-close-2');
+  const firstFocusable = () => {
+    const selectors = ['a[href]','button:not([disabled])','textarea','input[type="text"]','input[type="radio"]','input[type="checkbox"]','select','[tabindex]:not([tabindex="-1"])'];
+    const f = dialog.querySelectorAll(selectors.join(','));
+    return f.length ? f[0] : null;
+  };
+  let lastFocus = null;
+
+  function open(){
+    lastFocus = document.activeElement;
+    modal.removeAttribute('hidden');
+    modal.classList.add('open');
+    // Delay focus to ensure rendering
+    setTimeout(()=>{ (firstFocusable() || dialog).focus && (firstFocusable() || dialog).focus(); }, 0);
+    document.addEventListener('keydown', onKeydown);
+    document.addEventListener('click', onBackdropClick, true);
+  }
+  function close(){
+    modal.classList.remove('open');
+    modal.setAttribute('hidden','');
+    document.removeEventListener('keydown', onKeydown);
+    document.removeEventListener('click', onBackdropClick, true);
+    if (lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus();
+  }
+  function onKeydown(e){
+    if (e.key === 'Escape') { e.preventDefault(); close(); }
+    if (e.key === 'Tab') {
+      // Trap focus
+      const focusables = dialog.querySelectorAll('a[href],button:not([disabled]),textarea,input,select,[tabindex]:not([tabindex="-1"])');
+      if (!focusables.length) { e.preventDefault(); return; }
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+    }
+  }
+  function onBackdropClick(e){
+    if (!modal.classList.contains('open')) return;
+    if (e.target === modal) { close(); }
+  }
+
+  openBtn.addEventListener('click', (e)=>{ e.preventDefault(); open(); });
+  if (closeBtn) closeBtn.addEventListener('click', close);
+  if (closeBtn2) closeBtn2.addEventListener('click', close);
+})();

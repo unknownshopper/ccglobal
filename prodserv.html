@@ -93,8 +93,9 @@
               <li>Interoperabilidad Contable, Presupuestal y Programática.</li>
               <li>Automatización e interoperabilidad con MAP, SICOP y SIAFF.</li>
               <li><strong>Pilares de Implementación:</strong> Planificación, Configuración, Capacitación, Acompañamiento, Mejora Continua. <!-- TODO: Ajustar a pilares oficiales --></li>
-              <li><strong>Gestores:</strong> <!-- TODO: Mencionar gestores sin detalle --></li>
+              <li><strong>Gestores:</strong> Finanzas, Contabilidad, Soporte del gasto, Inventario, Patrimonio, Flota, Caja, Obras públicas, Nómina, Empleados.</li>
             </ul>
+            <p><a class="btn" href="#gestores-modal" id="open-gestores-modal" role="button" aria-haspopup="dialog" aria-controls="gestores-modal">Ver detalle de gestores</a></p>
             <p><a class="btn" href="contacto.html#contenido" aria-label="Solicitar información sobre GRP">Solicitar información</a></p>
           </div>
         </article>
@@ -133,6 +134,130 @@
       </div>
     </section>
   </main>
+
+  <!-- Modal: Detalle de Gestores -->
+  <div id="gestores-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="gestores-modal-title" hidden>
+    <div class="modal-dialog" role="document">
+      <div class="modal-header">
+        <h3 id="gestores-modal-title" class="modal-title">Gestores</h3>
+        <button type="button" class="modal-close" id="gestores-modal-close" aria-label="Cerrar">×</button>
+      </div>
+      <div class="modal-body" id="gestores-modal-body">
+        <h4>Finanzas</h4>
+        <ul>
+          <li>Ciclo presupuestal.</li>
+          <li>Presupuesto basado en resultados.</li>
+          <li>Clasificadores presupuestales a último nivel.</li>
+          <li>Generación automática de momentos presupuestales.</li>
+          <li>Consulta y emisión de reportes en tiempo real a cualquier nivel presupuestal.</li>
+          <li>Módulo de reclasificaciones.</li>
+          <li>Control y programación de pagos.</li>
+        </ul>
+
+        <h4>Contabilidad</h4>
+        <ul>
+          <li>Plan de cuentas armonizado.</li>
+          <li>Cuenta pública.</li>
+          <li>Generación automática de pólizas.</li>
+          <li>Consulta y emisión de reportes en tiempo real.</li>
+          <li>Eventos contables parametrizables.</li>
+        </ul>
+
+        <h4>Soporte del gasto</h4>
+        <ul>
+          <li>Solicitudes de pago.</li>
+          <li>Fondo rotatorio.</li>
+          <li>Gastos por cobrar.</li>
+          <li>Viáticos anticipados y devengados.</li>
+          <li>Almacén digital.</li>
+          <li>Módulo de pasajes y boletos de avión.</li>
+          <li>Consulta y emisión de reportes en tiempo real.</li>
+        </ul>
+
+        <h4>Inventario</h4>
+        <ul>
+          <li>Almacenes y ubicaciones.</li>
+          <li>Recepción automática de materiales por proceso de adquisición.</li>
+          <li>Traspasos entre almacenes.</li>
+          <li>Solicitudes de abastecimiento.</li>
+          <li>Control de inventario en tiempo real.</li>
+          <li>Ajustes de inventario.</li>
+          <li>Inventario físico.</li>
+        </ul>
+
+        <h4>Patrimonio</h4>
+        <ul>
+          <li>Catálogo de bienes muebles e inmuebles.</li>
+          <li>Alta automática de activo por proceso de adquisición.</li>
+          <li>Asignación y cambio de resguardantes.</li>
+          <li>Inventario físico.</li>
+          <li>Revaloración del activo fijo.</li>
+          <li>Depreciación automática.</li>
+        </ul>
+
+        <h4>Flota</h4>
+        <ul>
+          <li>Control de inventario de vehículos.</li>
+          <li>Seguros.</li>
+          <li>Combustibles.</li>
+          <li>Comodatos.</li>
+          <li>Arrendamientos.</li>
+          <li>Control de servicios vehiculares.</li>
+        </ul>
+
+        <h4>Caja</h4>
+        <ul>
+          <li>Oficinas recaudadoras y cajeros.</li>
+          <li>Portales ciudadanos.</li>
+          <li>Cobros en línea.</li>
+          <li>Kioscos.</li>
+          <li>Catastro.</li>
+          <li>Multas.</li>
+          <li>Padrón y licencias.</li>
+          <li>Consulta de recaudación en tiempo real.</li>
+        </ul>
+
+        <h4>Obras públicas</h4>
+        <ul>
+          <li>Programa anual de obras públicas.</li>
+          <li>Proyectos de obra.</li>
+          <li>Contratos de obra.</li>
+          <li>Anticipos.</li>
+          <li>Estimaciones.</li>
+          <li>Reclamos.</li>
+          <li>Avance físico y financiero.</li>
+          <li>Padrón de contratistas.</li>
+        </ul>
+
+        <h4>Nómina</h4>
+        <ul>
+          <li>Perfilados de puestos y plazas.</li>
+          <li>Reglas salariales.</li>
+          <li>Sindicatos.</li>
+          <li>Quinquenios.</li>
+          <li>Finiquitos.</li>
+          <li>Procesamiento automático de nómina.</li>
+          <li>Generación automática de afectación contable.</li>
+        </ul>
+
+        <h4>Empleados</h4>
+        <ul>
+          <li>Catálogo de empleados.</li>
+          <li>Gestión de personal.</li>
+          <li>Permisos.</li>
+          <li>Control de asistencias.</li>
+          <li>Evaluaciones.</li>
+          <li>Asignaciones.</li>
+          <li>Reclutamiento.</li>
+          <li>Registro histórico.</li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn" id="gestores-modal-close-2">Cerrar</button>
+      </div>
+    </div>
+  </div>
+  <!-- /Modal: Detalle de Gestores -->
 
   <footer class="site-footer" role="contentinfo">
     <div class="container">
