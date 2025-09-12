@@ -723,8 +723,8 @@ setActiveByPath();
         function setAll(open){ prepared.forEach(p => p.setOpen(open)); }
         function updateToggleLabel(){ toggleBtn.textContent = areAllOpen() ? 'Colapsar todo' : 'Expandir todo'; }
         toggleBtn.addEventListener('click', ()=>{
-          const nextOpen = !areAllOpen();
-          setAll(nextOpen);
+          const anyClosed = prepared.some(p => !p.isOpen());
+          setAll(anyClosed);
           updateToggleLabel();
         });
         // Inicializar etiqueta
@@ -1306,4 +1306,39 @@ setActiveByPath();
   openBtn.addEventListener('click', (e)=>{ e.preventDefault(); open(); });
   if (closeBtn) closeBtn.addEventListener('click', close);
   if (closeBtn2) closeBtn2.addEventListener('click', close);
+})();
+
+// ================= Título animado (banner desplazable) =================
+(function animateTitleMarquee(){
+  // Texto base del título; si cambia dinámicamente en el futuro, puedes ajustar para recapturarlo
+  const BASE = document.title || 'CCGlobal | Soluciones y Consultoría';
+  const SEP = '  •  '; // separador visual entre repeticiones
+  const SPEED_MS = 220; // velocidad del desplazamiento (ms por paso)
+
+  // Construir cadena extendida para efecto de carrusel
+  const scrollText = (BASE + SEP);
+  const L = scrollText.length;
+  let idx = 0;
+  let timer = 0;
+  let running = true;
+
+  function step(){
+    if (!running) return;
+    // Evita actualizar cuando la pestaña no es visible, pero mantiene el ritmo
+    if (document.hidden){ timer = setTimeout(step, SPEED_MS); return; }
+    // Desplazar 1 carácter hacia la izquierda
+    const view = scrollText.slice(idx) + scrollText.slice(0, idx);
+    document.title = view;
+    idx = (idx + 1) % L;
+    timer = setTimeout(step, SPEED_MS);
+  }
+
+  function start(){ if (!timer) timer = setTimeout(step, SPEED_MS); }
+  function stop(){ if (timer){ clearTimeout(timer); timer = 0; } running = false; }
+
+  // Iniciar cuando el DOM esté listo (defer garantizará que ya lo está, pero por seguridad)
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start, { once: true }); else start();
+
+  // Limpiar antes de salir
+  window.addEventListener('beforeunload', stop);
 })();
